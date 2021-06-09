@@ -1,35 +1,40 @@
-import pdf from "html-pdf";
-import Handlebars from "handlebars";
 import { useContext, useEffect, useState } from "react";
+
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
+import axios from "axios";
 
 function PdfDisplay() {
   let { template, options, data } = useContext(HtmlPdfContext);
   const [file, setFile] = useState("");
 
-  try {
-    options = JSON.parse(options);
-    data = JSON.parse(data);
-  } catch (e) {
-    console.error(e);
-  }
-  console.log(data, options);
-
   useEffect(async () => {
-    try {
-      const html = Handlebars.compile(template)(data);
-      console.log(html);
+    const res = await axios.post(
+      "http://localhost:5000/pdf",
+      {
+        template,
+        options,
+        data,
+      },
+      { responseType: "blob" }
+    );
 
-      pdf.create(html, options).toBuffer((err, buffer) => {
-        console.log("Buffer", buffer);
-        // setFile(res);
-      });
-    } catch (e) {
-      console.error(e);
-    }
+    const fileBlob = new Blob([res.data], { type: "application/pdf" });
+    const fileURL = URL.createObjectURL(fileBlob);
+
+    console.log(fileURL);
+
+    setFile(fileURL);
   }, [template, options, data]);
 
-  return <div>PdfDisplay</div>;
+  return (
+    <div>
+      <object
+        style={{ height: "85vh", width: "30vw" }}
+        data={file}
+        type="application/pdf"
+      ></object>
+    </div>
+  );
 }
 
 export default PdfDisplay;
