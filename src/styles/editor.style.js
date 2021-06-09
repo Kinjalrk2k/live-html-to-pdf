@@ -9,4 +9,5 @@ export default {
   },
   width: "100%",
   height: "83vh",
+  fontSize: "13px",
 };
