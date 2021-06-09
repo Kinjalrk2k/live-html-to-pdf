@@ -7,23 +7,27 @@ function PdfDisplay() {
   let { template, options, data } = useContext(HtmlPdfContext);
   const [file, setFile] = useState("");
 
-  useEffect(async () => {
-    const res = await axios.post(
-      "http://localhost:5000/pdf",
-      {
-        template,
-        options,
-        data,
-      },
-      { responseType: "blob" }
-    );
+  useEffect(() => {
+    const debounce = setTimeout(async () => {
+      const res = await axios.post(
+        "http://localhost:5000/pdf",
+        {
+          template,
+          options,
+          data,
+        },
+        { responseType: "blob" }
+      );
 
-    const fileBlob = new Blob([res.data], { type: "application/pdf" });
-    const fileURL = URL.createObjectURL(fileBlob);
+      const fileBlob = new Blob([res.data], { type: "application/pdf" });
+      const fileURL = URL.createObjectURL(fileBlob);
 
-    console.log(fileURL);
+      console.log(fileURL);
 
-    setFile(fileURL);
+      setFile(fileURL);
+    }, 500);
+
+    return () => clearTimeout(debounce);
   }, [template, options, data]);
 
   return (
