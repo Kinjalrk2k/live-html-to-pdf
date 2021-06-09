@@ -15,7 +15,8 @@ function PdfDisplay() {
       setIsLoading(true);
       try {
         const res = await axios.post(
-          "http://localhost:5000/pdf",
+          // "http://localhost:5000/pdf",
+          "https://live-html-to-pdf-backend.herokuapp.com/pdf",
           {
             template,
             options,
