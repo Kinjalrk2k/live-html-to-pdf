@@ -5,11 +5,13 @@ import PdfDisplay from "./components/PdfDisplay";
 
 import { HtmlPdfProvider } from "./contexts/HtmlPdf.context";
 import { Container, Row, Tab, Tabs, Col } from "react-bootstrap";
+import MyNavbar from "./components/MyNavbar";
 
 function App() {
   return (
     <HtmlPdfProvider>
       <div className="App">
+        <MyNavbar />
         <Container fluid>
           <Row>
             <Col>
