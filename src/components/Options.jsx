@@ -1,11 +1,13 @@
 import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/theme-dracula";
+import "ace-builds/src-noconflict/theme-github";
 import "ace-builds/src-noconflict/ext-language_tools";
 import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/snippets/json";
 
 import { useContext } from "react";
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
+
+import editorStyles from "../styles/editor.style";
 
 function Options() {
   const { options, setOptions } = useContext(HtmlPdfContext);
@@ -14,16 +16,9 @@ function Options() {
     <AceEditor
       mode="json"
       name="options"
-      theme="dracula"
       onChange={(val) => setOptions(val)}
       value={options}
-      setOptions={{
-        enableBasicAutocompletion: true,
-        enableLiveAutocompletion: true,
-        enableSnippets: true,
-        showLineNumbers: true,
-        tabSize: 2,
-      }}
+      {...editorStyles}
     />
   );
 }

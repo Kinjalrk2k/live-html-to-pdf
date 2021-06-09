@@ -29,7 +29,7 @@ function PdfDisplay() {
   return (
     <div>
       <object
-        style={{ height: "85vh", width: "30vw" }}
+        style={{ height: "90vh", width: "100%" }}
         data={file}
         type="application/pdf"
       ></object>
