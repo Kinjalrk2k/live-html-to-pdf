@@ -21,18 +21,6 @@ app.post("/pdf", async (req, res) => {
     options = JSON.parse(options);
     data = JSON.parse(data);
 
-    // options = {
-    //   ...options,
-    //   phantomPath: __dirname + "/node_modules/phantomjs-prebuilt/bin/phantomjs",
-    // };
-
-    // const html = Handlebars.compile(template)(data);
-    // console.log(html);
-
-    // pdf.create(html, options).toFile("./output.pdf", (err, file) => {
-    //   console.log("Buffer", file);
-    // });
-
     const document = {
       html: template,
       data,
@@ -42,10 +30,11 @@ app.post("/pdf", async (req, res) => {
 
     pdf.create(document, options).then((file) => {
       console.log(file.filename);
-      res.sendFile(file.filename);
+      return res.sendFile(file.filename);
     });
   } catch (e) {
-    console.error(e);
+    console.log("ERROR: ", e.message);
+    return res.status(400).json({ err: e.message });
   }
 });
 

@@ -2,40 +2,63 @@ import { useContext, useEffect, useState } from "react";
 
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 import axios from "axios";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Alert } from "react-bootstrap";
 
 function PdfDisplay() {
   let { template, options, data } = useContext(HtmlPdfContext);
   const [file, setFile] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const debounce = setTimeout(async () => {
       setIsLoading(true);
-      const res = await axios.post(
-        "http://localhost:5000/pdf",
-        {
-          template,
-          options,
-          data,
-        },
-        { responseType: "blob" }
-      );
+      try {
+        const res = await axios.post(
+          "http://localhost:5000/pdf",
+          {
+            template,
+            options,
+            data,
+          },
+          { responseType: "blob" }
+        );
 
-      const fileBlob = new Blob([res.data], { type: "application/pdf" });
-      const fileURL = URL.createObjectURL(fileBlob);
+        const fileBlob = new Blob([res.data], { type: "application/pdf" });
+        const fileURL = URL.createObjectURL(fileBlob);
 
-      console.log(fileURL);
+        console.log(fileURL);
 
-      setFile(fileURL);
+        setFile(fileURL);
 
-      setIsLoading(false);
+        setIsLoading(false);
+        setError(false);
+      } catch (e) {
+        setError(true);
+        console.log(e.response);
+      }
     }, 500);
 
     return () => clearTimeout(debounce);
   }, [template, options, data]);
 
   const render = () => {
+    if (error) {
+      return (
+        <div
+          style={{
+            height: "90vh",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Alert variant="danger">Opps! Error!</Alert>
+        </div>
+      );
+    }
+
     if (isLoading) {
       return (
         <div
@@ -50,15 +73,15 @@ function PdfDisplay() {
           <Spinner animation="border" variant="primary" size="xl" />
         </div>
       );
-    } else {
-      return (
-        <object
-          style={{ height: "90vh", width: "100%" }}
-          data={file}
-          type="application/pdf"
-        ></object>
-      );
     }
+
+    return (
+      <object
+        style={{ height: "90vh", width: "100%" }}
+        data={file}
+        type="application/pdf"
+      ></object>
+    );
   };
 
   return <div>{render()}</div>;
