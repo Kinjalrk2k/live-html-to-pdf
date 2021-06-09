@@ -1,7 +1,9 @@
 import Template from "./components/Template";
 import Options from "./components/Options";
-import { HtmlPdfProvider } from "./contexts/HtmlPdf.context";
 import Data from "./components/Data";
+import PdfDisplay from "./components/PdfDisplay";
+
+import { HtmlPdfProvider } from "./contexts/HtmlPdf.context";
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Options />
         <br />
         <Data />
+        <br />
+        <PdfDisplay />
       </div>
     </HtmlPdfProvider>
   );
