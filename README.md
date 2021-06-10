@@ -2,6 +2,10 @@
 
 Create PDFs with HTML and Handlebars with live reload!
 
+## Usage
+
+Deployed [here](https://live-html-to-pdf.netlify.app/) 🚀
+
 ## Usage (Locally)
 
 - Clone this repository
@@ -9,5 +13,3 @@ Create PDFs with HTML and Handlebars with live reload!
 - Install Frontend dependancies (React): `yarn install` (in the root directory)
 - Start the Backend Server: `npm start` (in the `server` directory)
 - Start the React Local Server: `npm start` (in the root directory)
-
-> Thinking of deploying this (efficiently...?)
