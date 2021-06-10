@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 import axios from "axios";
 import { Spinner, Alert } from "react-bootstrap";
+import api from "../api";
 
 function PdfDisplay() {
   let { template, options, data } = useContext(HtmlPdfContext);
@@ -14,9 +15,8 @@ function PdfDisplay() {
     const debounce = setTimeout(async () => {
       setIsLoading(true);
       try {
-        const res = await axios.post(
-          // "http://localhost:5000/pdf",
-          "https://live-html-to-pdf-backend.herokuapp.com/pdf",
+        const res = await api.post(
+          "/pdf",
           {
             template,
             options,
