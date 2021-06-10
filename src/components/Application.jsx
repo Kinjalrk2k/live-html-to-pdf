@@ -9,8 +9,8 @@ import { useContext } from "react";
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 
 function Application(props) {
-  const { setId } = useContext(HtmlPdfContext);
-  setId(props.match.params.id);
+  const { setProjectId } = useContext(HtmlPdfContext);
+  setProjectId(props.match.params.id);
 
   return (
     <>
@@ -19,7 +19,7 @@ function Application(props) {
         <Row>
           <Col>
             <Tabs defaultActiveKey="template" styles={{ height: "90vh" }}>
-              <Tab eventKey="template" title="Home">
+              <Tab eventKey="template" title="Template">
                 <Template />
               </Tab>
               <Tab eventKey="options" title="Options">

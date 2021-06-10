@@ -9,7 +9,7 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route path="/" exact component={LandingPage}></Route>
-          <Route path="/:id" exact component={Application}></Route>
+          <Route path="/p/:id" exact component={Application}></Route>
         </Switch>
       </BrowserRouter>
     </HtmlPdfProvider>
