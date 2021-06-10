@@ -6,7 +6,8 @@ import PdfDisplay from "./PdfDisplay";
 import { Container, Row, Tab, Tabs, Col } from "react-bootstrap";
 import MyNavbar from "./MyNavbar";
 
-function Application() {
+function Application(props) {
+  console.log(props.match.params.id);
   return (
     <>
       <MyNavbar />
