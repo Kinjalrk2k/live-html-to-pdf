@@ -5,12 +5,15 @@ import PdfDisplay from "./PdfDisplay";
 
 import { Container, Row, Tab, Tabs, Col } from "react-bootstrap";
 import MyNavbar from "./MyNavbar";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 
 function Application(props) {
   const { setProjectId } = useContext(HtmlPdfContext);
-  setProjectId(props.match.params.id);
+
+  useEffect(() => {
+    setProjectId(props.match.params.id);
+  }, []);
 
   return (
     <>

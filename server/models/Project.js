@@ -24,9 +24,9 @@ const defaultData = JSON.stringify(
 );
 
 const ProjectSchema = new mongoose.Schema({
-  projectId: String,
+  // projectId: String,
   template: { type: String, default: defaultTemplate },
-  options: { type: Stirng, default: defaultOptions },
+  options: { type: String, default: defaultOptions },
   data: { type: String, default: defaultData },
 });
 

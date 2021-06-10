@@ -2,6 +2,7 @@ const express = require("express");
 const Handlebars = require("handlebars");
 const mongoose = require("mongoose");
 const pdf = require("pdf-creator-node");
+const Project = require("./models/Project");
 
 require("dotenv/config");
 
@@ -49,6 +50,14 @@ app.post("/pdf", async (req, res) => {
     console.log("ERROR: ", e.message);
     return res.status(400).json({ err: e.message });
   }
+});
+
+app.get("/new", async (req, res) => {
+  const newProject = new Project();
+  const { _id } = await newProject.save();
+  console.log("Project created with ID:", _id);
+
+  return res.json({ projectId: _id });
 });
 
 const PORT = process.env.PORT || 5000;
