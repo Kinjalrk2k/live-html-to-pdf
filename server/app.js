@@ -1,13 +1,27 @@
 const express = require("express");
 const Handlebars = require("handlebars");
-// const pdf = require("html-pdf");
+const mongoose = require("mongoose");
 const pdf = require("pdf-creator-node");
+
+require("dotenv/config");
 
 const app = express();
 
 app.use(require("cors")());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const db = process.env.mongoURI;
+// Datebase connection
+mongoose
+  .connect(db, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  })
+  .then(() => console.log(`MongoDB connected successfully`))
+  .catch((err) => console.log(`Error connecting mongodb ` + err));
 
 app.get("/", (req, res) => {
   return res.json({ app: "Live HTML to PDF", developer: "Kinjal Raykarmakar" });
