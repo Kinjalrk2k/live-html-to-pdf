@@ -1,9 +1,17 @@
 import { useContext, useEffect, useState } from "react";
-
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
-import axios from "axios";
+
 import { Spinner, Alert } from "react-bootstrap";
+
 import api from "../api";
+
+const styles = {
+  height: "90vh",
+  width: "100%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};
 
 function PdfDisplay() {
   let { template, options, data } = useContext(HtmlPdfContext);
@@ -38,7 +46,7 @@ function PdfDisplay() {
         setError(true);
         console.log(e.response);
       }
-    }, 500);
+    }, 1000);
 
     return () => clearTimeout(debounce);
   }, [template, options, data]);
@@ -46,15 +54,7 @@ function PdfDisplay() {
   const render = () => {
     if (error) {
       return (
-        <div
-          style={{
-            height: "90vh",
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <div style={styles}>
           <Alert variant="danger">Opps! Error!</Alert>
         </div>
       );
@@ -62,27 +62,13 @@ function PdfDisplay() {
 
     if (isLoading) {
       return (
-        <div
-          style={{
-            height: "90vh",
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        <div style={styles}>
           <Spinner animation="border" variant="primary" size="xl" />
         </div>
       );
     }
 
-    return (
-      <object
-        style={{ height: "90vh", width: "100%" }}
-        data={file}
-        type="application/pdf"
-      ></object>
-    );
+    return <object style={styles} data={file} type="application/pdf"></object>;
   };
 
   return <div>{render()}</div>;
