@@ -18,6 +18,7 @@ const defaultData = {
 };
 
 export function HtmlPdfProvider(props) {
+  const [id, setId] = useState(null);
   const [template, setTemplate] = useState(defaultTemplate);
   const [data, setData] = useState(JSON.stringify(defaultData, null, 2));
   const [options, setOptions] = useState(
@@ -27,6 +28,8 @@ export function HtmlPdfProvider(props) {
   return (
     <HtmlPdfContext.Provider
       value={{
+        id,
+        setId,
         template,
         setTemplate,
         data,
