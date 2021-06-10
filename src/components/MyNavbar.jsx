@@ -1,6 +1,41 @@
-import { Container, Navbar, Nav } from "react-bootstrap";
+import { useContext, useState } from "react";
+import { Container, Navbar, Nav, Button, Spinner } from "react-bootstrap";
+import api from "../api";
+import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 
 function MyNavbar() {
+  const { projectId, template, data, options } = useContext(HtmlPdfContext);
+  const [saving, setSaving] = useState(false);
+
+  const saveProject = async () => {
+    setSaving(true);
+    const res = await api.post(`/project/${projectId}`, {
+      template,
+      data,
+      options,
+    });
+    setSaving(false);
+  };
+
+  const renderSave = () => {
+    if (saving) {
+      return (
+        <>
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+          Saving...
+        </>
+      );
+    }
+
+    return "Save Project";
+  };
+
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
@@ -8,9 +43,8 @@ function MyNavbar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav className="me-auto">
-            {/* <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link> */}
-            <Navbar.Text>Made with ❤ by Kinjal Raykarmakar</Navbar.Text>
+            <Button onClick={saveProject}>{renderSave()}</Button>
+            {/* <Navbar.Text>Made with ❤ by Kinjal Raykarmakar</Navbar.Text> */}
           </Nav>
         </Navbar.Collapse>
       </Container>

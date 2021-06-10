@@ -68,6 +68,19 @@ app.get("/project/:id", async (req, res) => {
   res.json(project);
 });
 
+app.post("/project/:id", async (req, res) => {
+  const { id } = req.params;
+  const { template, data, options } = req.body;
+
+  const project = await Project.findByIdAndUpdate(id, {
+    template,
+    data,
+    options,
+  });
+
+  res.json(project);
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));
