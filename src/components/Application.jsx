@@ -13,7 +13,7 @@ function Application(props) {
 
   useEffect(() => {
     setProjectId(props.match.params.id);
-  }, []);
+  });
 
   return (
     <>
