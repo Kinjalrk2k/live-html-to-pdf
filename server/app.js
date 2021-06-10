@@ -15,7 +15,6 @@ app.get("/", (req, res) => {
 
 app.post("/pdf", async (req, res) => {
   let { template, options, data } = req.body;
-  // console.log(__dirname + "/node_modules/phantomjs-prebuilt/bin/phantomjs");
 
   try {
     options = JSON.parse(options);
@@ -25,12 +24,12 @@ app.post("/pdf", async (req, res) => {
       html: template,
       data,
       path: "./output.pdf",
-      type: "",
+      type: "buffer",
     };
 
     pdf.create(document, options).then((file) => {
-      console.log(file.filename);
-      return res.sendFile(file.filename);
+      // console.log(file);
+      return res.send(file);
     });
   } catch (e) {
     console.log("ERROR: ", e.message);
