@@ -1,7 +1,9 @@
+import { findByLabelText } from "@testing-library/dom";
 import { useHistory } from "react-router-dom";
 import api from "../api";
+import pdfIcon from "../assets/pdf-icon.png";
 
-const { Button } = require("react-bootstrap");
+const { Button, Container, Row } = require("react-bootstrap");
 
 function LandingPage() {
   const history = useHistory();
@@ -14,10 +16,27 @@ function LandingPage() {
 
   return (
     <div>
-      Landing Page!
-      <Button variant="success" onClick={createNewProject}>
-        Create New Project
-      </Button>
+      <Container
+        style={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+          height: "70vh",
+          flexDirection: "column",
+        }}
+      >
+        <Row>
+          <h1>
+            Live <i>{"<html>"}</i> to{" "}
+            <img height="80px" src={pdfIcon} alt="Logo" />
+          </h1>
+        </Row>
+        <Row>
+          <Button variant="primary" onClick={createNewProject}>
+            Create New Project
+          </Button>
+        </Row>
+      </Container>
     </div>
   );
 }
