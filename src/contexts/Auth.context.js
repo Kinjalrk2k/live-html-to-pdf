@@ -14,6 +14,12 @@ export const AuthContext = createContext();
 export function AuthProvider(props) {
   const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      setUser(user ? user : null);
+    });
+  }, [user]);
+
   const signInContext = () => {
     firebase
       .auth()
