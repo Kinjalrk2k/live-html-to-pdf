@@ -1,6 +1,6 @@
 import { findByLabelText } from "@testing-library/dom";
 import { useHistory } from "react-router-dom";
-import api from "../api";
+import server from "../api/server";
 import pdfIcon from "../assets/pdf-icon.png";
 
 const { Button, Container, Row } = require("react-bootstrap");
@@ -9,7 +9,7 @@ function LandingPage() {
   const history = useHistory();
 
   const createNewProject = async () => {
-    const res = await api.get("/new");
+    const res = await server.get("/new");
     const { projectId } = res.data;
     history.push(`/p/${projectId}`);
   };

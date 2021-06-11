@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import api from "../api";
+import server from "../api/server";
 
 export const HtmlPdfContext = createContext();
 
@@ -10,7 +10,7 @@ export function HtmlPdfProvider(props) {
   const [options, setOptions] = useState("");
 
   useEffect(async () => {
-    const res = await api.get(`/project/${projectId}`);
+    const res = await server.get(`/project/${projectId}`);
     const { template, data, options } = res.data;
 
     setTemplate(template);

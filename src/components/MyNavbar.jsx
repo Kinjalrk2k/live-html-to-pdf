@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { Container, Navbar, Nav, Button, Spinner } from "react-bootstrap";
-import api from "../api";
+import server from "../api/server";
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 
 function MyNavbar() {
@@ -9,7 +9,7 @@ function MyNavbar() {
 
   const saveProject = async () => {
     setSaving(true);
-    const res = await api.post(`/project/${projectId}`, {
+    const res = await server.post(`/project/${projectId}`, {
       template,
       data,
       options,

@@ -15,10 +15,6 @@ const serviceAccount = {
   )}`,
 };
 
-console.log(serviceAccount);
-console.log(require("../serviceAccount.json"));
-console.log(serviceAccount.is(require("../serviceAccount.json")));
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
