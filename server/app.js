@@ -1,10 +1,12 @@
+require("dotenv/config");
+
 const express = require("express");
 const Handlebars = require("handlebars");
 const mongoose = require("mongoose");
 const pdf = require("pdf-creator-node");
 const Project = require("./models/Project");
 
-require("dotenv/config");
+const { decodeIDToken } = require("./middlewares/firebase");
 
 const app = express();
 
