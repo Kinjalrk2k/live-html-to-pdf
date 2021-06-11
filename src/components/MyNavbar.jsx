@@ -1,11 +1,14 @@
+import { useEffect } from "react";
 import { useContext, useState } from "react";
 import { Container, Navbar, Nav, Button, Spinner } from "react-bootstrap";
 import server from "../api/server";
+import { AuthContext } from "../contexts/Auth.context";
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 
 function MyNavbar() {
   const { projectId, template, data, options } = useContext(HtmlPdfContext);
   const [saving, setSaving] = useState(false);
+  const { user, signInContext, signOutContext } = useContext(AuthContext);
 
   const saveProject = async () => {
     setSaving(true);
@@ -36,6 +39,22 @@ function MyNavbar() {
     return "Save Project";
   };
 
+  const renderSignIn = () => {
+    if (user) {
+      return (
+        <Button variant="danger" onClick={() => signOutContext()}>
+          Sign Out
+        </Button>
+      );
+    }
+
+    return (
+      <Button variant="success" onClick={() => signInContext()}>
+        Sign In
+      </Button>
+    );
+  };
+
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
@@ -44,6 +63,7 @@ function MyNavbar() {
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav className="me-auto">
             <Button onClick={saveProject}>{renderSave()}</Button>
+            {renderSignIn()}
             {/* <Navbar.Text>Made with ❤ by Kinjal Raykarmakar</Navbar.Text> */}
           </Nav>
         </Navbar.Collapse>
