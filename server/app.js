@@ -54,7 +54,7 @@ app.post("/pdf", async (req, res) => {
   }
 });
 
-app.get("/new", async (req, res) => {
+app.get("/new", decodeIDToken, async (req, res) => {
   const newProject = new Project();
   const { _id } = await newProject.save();
   console.log("Project created with ID:", _id);
@@ -70,7 +70,8 @@ app.get("/project/:id", async (req, res) => {
   res.json(project);
 });
 
-app.post("/project/:id", async (req, res) => {
+app.post("/project/:id", decodeIDToken, async (req, res) => {
+  console.log(req.user);
   const { id } = req.params;
   const { template, data, options } = req.body;
 

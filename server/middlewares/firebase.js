@@ -1,4 +1,5 @@
 var admin = require("firebase-admin");
+const User = require("../models/User");
 
 const serviceAccount = {
   type: "service_account",
@@ -27,9 +28,21 @@ async function decodeIDToken(req, res, next) {
       try {
         const decodedToken = await admin.auth().verifyIdToken(idToken);
         req.userUID = decodedToken.uid;
-        return next();
+
+        const user = await User.findOne({ uid: decodedToken.uid });
+        if (user) {
+          req.user = user;
+          return next();
+        } else {
+          const newUser = new User(decodedToken);
+          newUser.save();
+          req.user = newUser;
+          return next();
+        }
       } catch (err) {
-        res.status(403).json(err);
+        req.user = undefined;
+        return next();
+        // res.status(403).json(err);
       }
     } else {
       res.status(403).json({ msg: "Missing Bearer Token" });

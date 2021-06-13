@@ -42,7 +42,7 @@ function MyNavbar() {
 
     if (saving) {
       return (
-        <>
+        <Button>
           <Spinner
             as="span"
             animation="border"
@@ -50,7 +50,7 @@ function MyNavbar() {
             role="status"
             aria-hidden="true"
           />
-        </>
+        </Button>
       );
     }
 
