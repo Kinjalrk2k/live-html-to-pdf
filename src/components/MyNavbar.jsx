@@ -143,9 +143,13 @@ function MyNavbar() {
             className="mr-sm-2"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            disabled={!(owner === undefined || owner.uid === user.uid)}
+            disabled={!(isSignedIn && owner.uid === user.uid)}
           />
-          <Button variant="warning" type="submit">
+          <Button
+            variant="warning"
+            type="submit"
+            disabled={!(isSignedIn && owner.uid === user.uid)}
+          >
             Rename
           </Button>
         </Form>
