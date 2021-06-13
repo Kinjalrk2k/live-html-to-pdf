@@ -85,14 +85,47 @@ function LandingPage() {
     );
   }
 
+  const renderSignIn = () => {
+    if (isSignedIn === null) {
+      return (
+        <Button variant="primary">
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+        </Button>
+      );
+    }
+
+    if (isSignedIn === true) {
+      return (
+        <Button variant="danger" onClick={() => signOutContext()}>
+          Sign Out
+        </Button>
+      );
+    }
+
+    return (
+      <Button variant="success" onClick={() => signInContext()}>
+        Sign In
+      </Button>
+    );
+  };
+
   return (
     <div>
+      <Container className="pt-2">
+        <Row style={{ justifyContent: "flex-end" }}>{renderSignIn()}</Row>
+      </Container>
       <Container
         style={{
           display: "flex",
           justifyContent: "space-evenly",
           alignItems: "center",
-          height: "70vh",
+          height: "60vh",
           flexDirection: "column",
         }}
       >
