@@ -25,9 +25,11 @@ const defaultData = JSON.stringify(
 
 const ProjectSchema = new mongoose.Schema({
   // projectId: String,
+  title: { type: String, default: "Untitled Project" },
   template: { type: String, default: defaultTemplate },
   options: { type: String, default: defaultOptions },
   data: { type: String, default: defaultData },
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
 module.exports = Project = mongoose.model("Project", ProjectSchema);

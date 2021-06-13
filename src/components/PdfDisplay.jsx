@@ -3,7 +3,7 @@ import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 
 import { Spinner, Alert } from "react-bootstrap";
 
-import api from "../api";
+import server from "../api/server";
 
 const styles = {
   height: "90vh",
@@ -23,7 +23,7 @@ function PdfDisplay() {
     const debounce = setTimeout(async () => {
       setIsLoading(true);
       try {
-        const res = await api.post(
+        const res = await server.post(
           "/pdf",
           {
             template,

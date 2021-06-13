@@ -3,17 +3,39 @@ import Options from "./Options";
 import Data from "./Data";
 import PdfDisplay from "./PdfDisplay";
 
-import { Container, Row, Tab, Tabs, Col } from "react-bootstrap";
+import { Container, Row, Tab, Tabs, Col, Spinner } from "react-bootstrap";
 import MyNavbar from "./MyNavbar";
 import { useContext, useEffect } from "react";
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
+import { AuthContext } from "../contexts/Auth.context";
 
 function Application(props) {
-  const { setProjectId } = useContext(HtmlPdfContext);
+  const { setProjectId, owner } = useContext(HtmlPdfContext);
+  const { isSignedIn } = useContext(AuthContext);
 
   useEffect(() => {
     setProjectId(props.match.params.id);
   });
+
+  if (owner === null || isSignedIn === null) {
+    return (
+      <div
+        style={{
+          height: "100vh",
+          width: "100vw",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Spinner
+          style={{ width: "5rem", height: "5rem" }}
+          animation="border"
+          variant="secondary"
+        />
+      </div>
+    );
+  }
 
   return (
     <>
