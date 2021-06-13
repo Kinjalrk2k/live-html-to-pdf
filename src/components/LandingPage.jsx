@@ -2,14 +2,27 @@ import { findByLabelText } from "@testing-library/dom";
 import { useHistory } from "react-router-dom";
 import server from "../api/server";
 import pdfIcon from "../assets/pdf-icon.png";
+import { AuthContext } from "../contexts/Auth.context";
+import { useContext, useState } from "react";
 
 const { Button, Container, Row } = require("react-bootstrap");
 
 function LandingPage() {
   const history = useHistory();
+  const {
+    user,
+    signInContext,
+    signOutContext,
+    isSignedIn,
+    getCurrentUserIdToken,
+  } = useContext(AuthContext);
 
   const createNewProject = async () => {
-    const res = await server.get("/new");
+    const token = await getCurrentUserIdToken();
+
+    const res = await server.get("/new", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     const { projectId } = res.data;
     history.push(`/p/${projectId}`);
   };

@@ -8,11 +8,11 @@ export function HtmlPdfProvider(props) {
   const [template, setTemplate] = useState("");
   const [data, setData] = useState("");
   const [options, setOptions] = useState("");
-  const [owner, setOwner] = useState("");
+  const [owner, setOwner] = useState(null);
 
   useEffect(async () => {
     const res = await server.get(`/project/${projectId}`);
-    const { template, data, options } = res.data;
+    const { template, data, options, owner } = res.data;
 
     setTemplate(template);
     setData(data);

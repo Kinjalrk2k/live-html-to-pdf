@@ -55,7 +55,13 @@ app.post("/pdf", async (req, res) => {
 });
 
 app.get("/new", decodeIDToken, async (req, res) => {
-  const newProject = new Project();
+  let query = {};
+  if (req.user) {
+    console.log("Owner:", req.user._id);
+    query["owner"] = req.user._id;
+  }
+
+  const newProject = new Project(query);
   const { _id } = await newProject.save();
   console.log("Project created with ID:", _id);
 
@@ -65,13 +71,13 @@ app.get("/new", decodeIDToken, async (req, res) => {
 app.get("/project/:id", async (req, res) => {
   const { id } = req.params;
 
-  const project = await Project.findById(id);
+  console.log("Getting project ID", id);
+  const project = await Project.findById(id).populate("owner");
 
   res.json(project);
 });
 
 app.post("/project/:id", decodeIDToken, async (req, res) => {
-  console.log(req.user);
   const { id } = req.params;
   const { template, data, options } = req.body;
 
@@ -96,7 +102,7 @@ app.post("/project/:id", decodeIDToken, async (req, res) => {
 
   // const updatedProject = await Project.findById(id).populate("owner");
   const updatedProject = await Project.populate(project, { path: "owner" });
-  console.log(updatedProject);
+  // console.log(updatedProject);
 
   res.json(updatedProject);
 });

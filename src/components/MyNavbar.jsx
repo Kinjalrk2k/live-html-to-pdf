@@ -43,21 +43,26 @@ function MyNavbar() {
       );
     }
 
-    if (owner === "" || owner.uid === user.uid) {
-      if (saving) {
-        return (
-          <Button>
-            <Spinner
-              as="span"
-              animation="border"
-              size="sm"
-              role="status"
-              aria-hidden="true"
-            />
-          </Button>
-        );
-      }
+    if (saving) {
+      return (
+        <Button>
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+        </Button>
+      );
+    }
 
+    // console.log("Owner", owner);
+    // console.log("User", user);
+    // if (owner === null) {
+    //   return <Button onClick={saveProject}>NULL OWNER</Button>;
+    // }
+    if (owner === undefined || owner.uid === user.uid) {
       return <Button onClick={saveProject}>Save Project</Button>;
     } else {
       return (
