@@ -13,10 +13,17 @@ export const AuthContext = createContext();
 
 export function AuthProvider(props) {
   const [user, setUser] = useState(null);
+  const [isSignedIn, setIsSignedIn] = useState(null);
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((user) => {
-      setUser(user ? user : null);
+      if (user) {
+        setUser(user);
+        setIsSignedIn(true);
+      } else {
+        setUser(null);
+        setIsSignedIn(false);
+      }
     });
   }, [user]);
 
@@ -56,6 +63,8 @@ export function AuthProvider(props) {
         signInContext,
         signOutContext,
         getCurrentUserIdToken,
+        isSignedIn,
+        setIsSignedIn,
       }}
     >
       {props.children}

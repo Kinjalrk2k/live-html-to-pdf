@@ -8,7 +8,8 @@ import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 function MyNavbar() {
   const { projectId, template, data, options } = useContext(HtmlPdfContext);
   const [saving, setSaving] = useState(false);
-  const { user, signInContext, signOutContext } = useContext(AuthContext);
+  const { user, signInContext, signOutContext, isSignedIn } =
+    useContext(AuthContext);
 
   const saveProject = async () => {
     setSaving(true);
@@ -31,7 +32,6 @@ function MyNavbar() {
             role="status"
             aria-hidden="true"
           />
-          Saving...
         </>
       );
     }
@@ -40,7 +40,21 @@ function MyNavbar() {
   };
 
   const renderSignIn = () => {
-    if (user) {
+    if (isSignedIn === null) {
+      return (
+        <Button variant="primary" onClick={() => signOutContext()}>
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+        </Button>
+      );
+    }
+
+    if (isSignedIn === true) {
       return (
         <Button variant="danger" onClick={() => signOutContext()}>
           Sign Out
