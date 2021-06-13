@@ -24,7 +24,6 @@ function MyNavbar() {
     title,
     setTitle,
   } = useContext(HtmlPdfContext);
-  const [saving, setSaving] = useState(false);
   const {
     user,
     signInContext,
@@ -32,6 +31,8 @@ function MyNavbar() {
     isSignedIn,
     getCurrentUserIdToken,
   } = useContext(AuthContext);
+  const [saving, setSaving] = useState(false);
+  const [titleChanging, setTitleChanging] = useState(false);
 
   const saveProject = async () => {
     setSaving(true);
@@ -121,6 +122,7 @@ function MyNavbar() {
 
   const titleChange = async (e) => {
     e.preventDefault();
+    setTitleChanging(true);
     setTitle(e.target[0].value);
 
     const token = await getCurrentUserIdToken();
@@ -129,7 +131,11 @@ function MyNavbar() {
       { title },
       { headers: { Authorization: `Bearer ${token}` } }
     );
+    setTitleChanging(false);
   };
+
+  // console.log("Owner", owner);
+  // console.log("User", user);
 
   return (
     <Navbar bg="light" expand="lg">
@@ -143,20 +149,34 @@ function MyNavbar() {
             className="mr-sm-2"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            disabled={!(isSignedIn && owner.uid === user.uid)}
+            disabled={
+              !(owner === undefined || (isSignedIn && owner.uid === user.uid))
+            }
           />
           <Button
             variant="warning"
             type="submit"
-            disabled={!(isSignedIn && owner.uid === user.uid)}
+            disabled={
+              !(owner === undefined || (isSignedIn && owner.uid === user.uid))
+            }
           >
-            Rename
+            {titleChanging ? (
+              <Spinner
+                as="span"
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+            ) : (
+              "Rename"
+            )}
           </Button>
         </Form>
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav className="me-auto">
             {renderSave()}
-            {renderSignIn()}
+            <div className="ml-3">{renderSignIn()}</div>
             {/* <Navbar.Text>Made with ❤ by Kinjal Raykarmakar</Navbar.Text> */}
           </Nav>
         </Navbar.Collapse>

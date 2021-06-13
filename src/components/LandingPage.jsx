@@ -6,7 +6,7 @@ import { useContext, useState } from "react";
 import { useEffect } from "react";
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 
-const { Button, Container, Row, Card } = require("react-bootstrap");
+import { Button, Container, Row, Card, Spinner } from "react-bootstrap";
 
 function LandingPage() {
   const history = useHistory();
@@ -64,6 +64,26 @@ function LandingPage() {
       );
     });
   };
+
+  if (isSignedIn === null) {
+    return (
+      <div
+        style={{
+          height: "100vh",
+          width: "100vw",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Spinner
+          style={{ width: "5rem", height: "5rem" }}
+          animation="border"
+          variant="secondary"
+        />
+      </div>
+    );
+  }
 
   return (
     <div>
