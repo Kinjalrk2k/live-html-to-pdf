@@ -53,7 +53,7 @@ function LandingPage() {
       return (
         <Card key={project._id} style={{ width: "18rem", marginTop: "2rem" }}>
           <Card.Body>
-            <Card.Title>Card Title</Card.Title>
+            <Card.Title>{project.title}</Card.Title>
             <Card.Subtitle className="mb-2 text-muted">
               {project._id}
             </Card.Subtitle>

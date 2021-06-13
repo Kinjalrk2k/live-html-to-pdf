@@ -1,13 +1,29 @@
 import { useEffect } from "react";
 import { useContext, useState } from "react";
-import { Container, Navbar, Nav, Button, Spinner } from "react-bootstrap";
+import {
+  Container,
+  Navbar,
+  Nav,
+  Button,
+  Spinner,
+  FormControl,
+  Form,
+} from "react-bootstrap";
 import server from "../api/server";
 import { AuthContext } from "../contexts/Auth.context";
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 
 function MyNavbar() {
-  const { projectId, template, data, options, owner, setOwner } =
-    useContext(HtmlPdfContext);
+  const {
+    projectId,
+    template,
+    data,
+    options,
+    owner,
+    setOwner,
+    title,
+    setTitle,
+  } = useContext(HtmlPdfContext);
   const [saving, setSaving] = useState(false);
   const {
     user,
@@ -103,11 +119,36 @@ function MyNavbar() {
     );
   };
 
+  const titleChange = async (e) => {
+    e.preventDefault();
+    setTitle(e.target[0].value);
+
+    const token = await getCurrentUserIdToken();
+    const res = await server.patch(
+      `/project/${projectId}/title`,
+      { title },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+  };
+
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
         <Navbar.Brand href="/">Live HTML to PDF</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Form inline onSubmit={titleChange}>
+          <FormControl
+            type="text"
+            placeholder="Title"
+            className="mr-sm-2"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            disabled={!(owner === undefined || owner.uid === user.uid)}
+          />
+          <Button variant="warning" type="submit">
+            Rename
+          </Button>
+        </Form>
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav className="me-auto">
             {renderSave()}

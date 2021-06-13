@@ -117,6 +117,11 @@ app.get("/projects", decodeIDToken, async (req, res) => {
   return res.json(projects);
 });
 
+app.patch("/project/:id/title", decodeIDToken, async (req, res) => {
+  await Project.findByIdAndUpdate(req.params.id, { title: req.body.title });
+  res.json({ success: true });
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));

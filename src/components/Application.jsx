@@ -7,13 +7,19 @@ import { Container, Row, Tab, Tabs, Col } from "react-bootstrap";
 import MyNavbar from "./MyNavbar";
 import { useContext, useEffect } from "react";
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
+import { AuthContext } from "../contexts/Auth.context";
 
 function Application(props) {
-  const { setProjectId } = useContext(HtmlPdfContext);
+  const { setProjectId, owner } = useContext(HtmlPdfContext);
+  const { isSignedIn } = useContext(AuthContext);
 
   useEffect(() => {
     setProjectId(props.match.params.id);
   });
+
+  if (owner === null || isSignedIn === null) {
+    return <div>Loading....</div>;
+  }
 
   return (
     <>
