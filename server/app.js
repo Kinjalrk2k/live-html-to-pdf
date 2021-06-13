@@ -95,7 +95,7 @@ app.post("/project/:id", decodeIDToken, async (req, res) => {
     console.log("Can save 2");
   } else {
     console.log("Cannot save");
-    return res.status(403).json({ err: "you don't own this project" });
+    return res.status(403).json({ err: "You don't own this project" });
   }
 
   project.save();
@@ -105,6 +105,16 @@ app.post("/project/:id", decodeIDToken, async (req, res) => {
   // console.log(updatedProject);
 
   res.json(updatedProject);
+});
+
+app.get("/projects", decodeIDToken, async (req, res) => {
+  let projects = [];
+  if (req.user) {
+    console.log("Owner:", req.user._id);
+    projects = await Project.find({ owner: req.user._id });
+    console.log(projects);
+  }
+  return res.json(projects);
 });
 
 const PORT = process.env.PORT || 5000;
