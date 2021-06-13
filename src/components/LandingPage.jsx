@@ -20,8 +20,10 @@ function LandingPage() {
   const { setOwner } = useContext(HtmlPdfContext);
 
   const [projects, setProjects] = useState([]);
+  const [creating, setCreating] = useState(false);
 
   const createNewProject = async () => {
+    setCreating(true);
     const token = await getCurrentUserIdToken();
 
     const res = await server.get("/new", {
@@ -31,6 +33,7 @@ function LandingPage() {
 
     setOwner(owner);
     history.push(`/p/${projectId}`);
+    setCreating(false);
   };
 
   useEffect(() => {
@@ -136,8 +139,18 @@ function LandingPage() {
           </h1>
         </Row>
         <Row>
-          <Button variant="primary" onClick={createNewProject}>
-            Create New Project
+          <Button variant="primary" size="lg" onClick={createNewProject}>
+            {creating ? (
+              <Spinner
+                as="span"
+                animation="border"
+                size="lg"
+                role="status"
+                aria-hidden="true"
+              />
+            ) : (
+              "Create NEW project"
+            )}
           </Button>
         </Row>
       </Container>
