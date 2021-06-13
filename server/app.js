@@ -75,13 +75,30 @@ app.post("/project/:id", decodeIDToken, async (req, res) => {
   const { id } = req.params;
   const { template, data, options } = req.body;
 
-  const project = await Project.findByIdAndUpdate(id, {
-    template,
-    data,
-    options,
-  });
+  const project = await Project.findById(id);
+  const owner = project.owner;
 
-  res.json(project);
+  project.template = template;
+  project.data = data;
+  project.options = options;
+
+  if (owner === undefined) {
+    console.log("Can save 1");
+    project.owner = req.user._id;
+  } else if (owner.equals(req.user._id)) {
+    console.log("Can save 2");
+  } else {
+    console.log("Cannot save");
+    return res.status(403).json({ err: "you don't own this project" });
+  }
+
+  project.save();
+
+  // const updatedProject = await Project.findById(id).populate("owner");
+  const updatedProject = await Project.populate(project, { path: "owner" });
+  console.log(updatedProject);
+
+  res.json(updatedProject);
 });
 
 const PORT = process.env.PORT || 5000;

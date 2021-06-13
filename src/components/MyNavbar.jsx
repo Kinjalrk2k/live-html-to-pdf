@@ -6,7 +6,8 @@ import { AuthContext } from "../contexts/Auth.context";
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 
 function MyNavbar() {
-  const { projectId, template, data, options } = useContext(HtmlPdfContext);
+  const { projectId, template, data, options, owner, setOwner } =
+    useContext(HtmlPdfContext);
   const [saving, setSaving] = useState(false);
   const {
     user,
@@ -28,33 +29,43 @@ function MyNavbar() {
       },
       { headers: { Authorization: `Bearer ${token}` } }
     );
+
+    setOwner(res.data.owner);
     setSaving(false);
   };
 
   const renderSave = () => {
-    // if (isSignedIn !== true) {
-    //   return (
-    //     <Button variant="secondary" disabled>
-    //       Sign in to Save/Fork
-    //     </Button>
-    //   );
-    // }
-
-    if (saving) {
+    if (isSignedIn !== true) {
       return (
-        <Button>
-          <Spinner
-            as="span"
-            animation="border"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-          />
+        <Button variant="secondary" disabled>
+          Sign in to Save
         </Button>
       );
     }
 
-    return <Button onClick={saveProject}>Save Project</Button>;
+    if (owner === "" || owner.uid === user.uid) {
+      if (saving) {
+        return (
+          <Button>
+            <Spinner
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
+          </Button>
+        );
+      }
+
+      return <Button onClick={saveProject}>Save Project</Button>;
+    } else {
+      return (
+        <Button variant="secondary" disabled>
+          You dont own this project!
+        </Button>
+      );
+    }
   };
 
   const renderSignIn = () => {

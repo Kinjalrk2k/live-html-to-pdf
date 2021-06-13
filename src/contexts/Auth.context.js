@@ -27,28 +27,21 @@ export function AuthProvider(props) {
     });
   }, [user]);
 
-  const signInContext = () => {
-    firebase
-      .auth()
-      .signInWithPopup(provider)
-      .then((result) => {
-        setUser(result.user);
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // The email of the user's account used.
-        var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
-        // ...
-      });
+  const signInContext = async () => {
+    try {
+      const res = await firebase.auth().signInWithPopup(provider);
+      setUser(res.user);
+      setIsSignedIn(true);
+    } catch (e) {
+      setUser(null);
+      setIsSignedIn(false);
+    }
   };
 
   const signOutContext = () => {
     firebase.auth().signOut();
     setUser(null);
+    setIsSignedIn(false);
   };
 
   const getCurrentUserIdToken = async () => {

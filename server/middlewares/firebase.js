@@ -45,10 +45,14 @@ async function decodeIDToken(req, res, next) {
         // res.status(403).json(err);
       }
     } else {
-      res.status(403).json({ msg: "Missing Bearer Token" });
+      req.user = undefined;
+      return next();
+      // res.status(403).json({ msg: "Missing Bearer Token" });
     }
   } else {
-    res.status(401).json({ msg: "Missing Authorization" });
+    req.user = undefined;
+    return next();
+    // res.status(401).json({ msg: "Missing Authorization" });
   }
 }
 
