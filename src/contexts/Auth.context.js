@@ -51,8 +51,13 @@ export function AuthProvider(props) {
     setUser(null);
   };
 
-  const getCurrentUserIdToken = () => {
-    return firebase.auth().currentUser.getIdToken(true);
+  const getCurrentUserIdToken = async () => {
+    const currentUser = firebase.auth().currentUser;
+    if (currentUser) {
+      return await currentUser.getIdToken(true);
+    } else {
+      return null;
+    }
   };
 
   return (

@@ -8,20 +8,38 @@ import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 function MyNavbar() {
   const { projectId, template, data, options } = useContext(HtmlPdfContext);
   const [saving, setSaving] = useState(false);
-  const { user, signInContext, signOutContext, isSignedIn } =
-    useContext(AuthContext);
+  const {
+    user,
+    signInContext,
+    signOutContext,
+    isSignedIn,
+    getCurrentUserIdToken,
+  } = useContext(AuthContext);
 
   const saveProject = async () => {
     setSaving(true);
-    const res = await server.post(`/project/${projectId}`, {
-      template,
-      data,
-      options,
-    });
+    const token = await getCurrentUserIdToken();
+    const res = await server.post(
+      `/project/${projectId}`,
+      {
+        template,
+        data,
+        options,
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
     setSaving(false);
   };
 
   const renderSave = () => {
+    // if (isSignedIn !== true) {
+    //   return (
+    //     <Button variant="secondary" disabled>
+    //       Sign in to Save/Fork
+    //     </Button>
+    //   );
+    // }
+
     if (saving) {
       return (
         <>
@@ -36,13 +54,13 @@ function MyNavbar() {
       );
     }
 
-    return "Save Project";
+    return <Button onClick={saveProject}>Save Project</Button>;
   };
 
   const renderSignIn = () => {
     if (isSignedIn === null) {
       return (
-        <Button variant="primary" onClick={() => signOutContext()}>
+        <Button variant="primary">
           <Spinner
             as="span"
             animation="border"
@@ -76,7 +94,7 @@ function MyNavbar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav className="me-auto">
-            <Button onClick={saveProject}>{renderSave()}</Button>
+            {renderSave()}
             {renderSignIn()}
             {/* <Navbar.Text>Made with ❤ by Kinjal Raykarmakar</Navbar.Text> */}
           </Nav>
