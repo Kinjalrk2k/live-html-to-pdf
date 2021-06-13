@@ -4,6 +4,7 @@ import pdfIcon from "../assets/pdf-icon.png";
 import { AuthContext } from "../contexts/Auth.context";
 import { useContext, useState } from "react";
 import { useEffect } from "react";
+import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 
 const { Button, Container, Row, Card } = require("react-bootstrap");
 
@@ -16,6 +17,8 @@ function LandingPage() {
     isSignedIn,
     getCurrentUserIdToken,
   } = useContext(AuthContext);
+  const { setOwner } = useContext(HtmlPdfContext);
+
   const [projects, setProjects] = useState([]);
 
   const createNewProject = async () => {
@@ -24,7 +27,9 @@ function LandingPage() {
     const res = await server.get("/new", {
       headers: { Authorization: `Bearer ${token}` },
     });
-    const { projectId } = res.data;
+    const { projectId, owner } = res.data;
+
+    setOwner(owner);
     history.push(`/p/${projectId}`);
   };
 
@@ -38,9 +43,12 @@ function LandingPage() {
 
       setProjects(res.data);
     })();
-  });
+  }, [isSignedIn]);
 
   const renderProjects = () => {
+    if (projects.length === 0) {
+      return <div>No projects found!</div>;
+    }
     return projects.map((project, idx) => {
       return (
         <Card key={project._id} style={{ width: "18rem", marginTop: "2rem" }}>

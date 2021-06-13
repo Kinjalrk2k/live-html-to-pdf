@@ -65,7 +65,7 @@ app.get("/new", decodeIDToken, async (req, res) => {
   const { _id } = await newProject.save();
   console.log("Project created with ID:", _id);
 
-  return res.json({ projectId: _id });
+  return res.json({ projectId: _id, owner: req.user });
 });
 
 app.get("/project/:id", async (req, res) => {
