@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useContext, useState } from "react";
 import {
   Container,
@@ -38,6 +37,8 @@ function MyNavbar() {
 
   const saveProject = async () => {
     setSaving(true);
+    console.log(projectId);
+
     const token = await getCurrentUserIdToken();
     const res = await server.post(
       `/project/${projectId}`,
@@ -55,13 +56,13 @@ function MyNavbar() {
 
   const forkProject = async () => {
     setSaving(true);
+
     const token = await getCurrentUserIdToken();
     const res = await server.get(`/fork/${projectId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    const { projectId, owner } = res.data;
-    setOwner(owner);
-    history.push(`/p/${projectId}`);
+    setOwner(res.data.owner);
+    history.push(`/p/${res.data.projectId}`);
     setSaving(false);
   };
 
