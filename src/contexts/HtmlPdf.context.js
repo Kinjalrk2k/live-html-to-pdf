@@ -10,16 +10,18 @@ export function HtmlPdfProvider(props) {
   const [options, setOptions] = useState("");
   const [owner, setOwner] = useState(null);
   const [title, setTitle] = useState("");
+  const [forks, setForks] = useState("");
 
   useEffect(async () => {
     const res = await server.get(`/project/${projectId}`);
-    const { template, data, options, owner, title } = res.data;
+    const { template, data, options, owner, title, forks } = res.data;
 
     setTemplate(template);
     setData(data);
     setOptions(options);
     setOwner(owner);
     setTitle(title);
+    setForks(forks);
   }, [projectId]);
 
   return (
@@ -37,6 +39,8 @@ export function HtmlPdfProvider(props) {
         setOwner,
         title,
         setTitle,
+        forks,
+        setForks,
       }}
     >
       {props.children}

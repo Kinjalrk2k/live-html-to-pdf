@@ -7,6 +7,7 @@ import {
   Spinner,
   FormControl,
   Form,
+  Badge,
 } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import server from "../api/server";
@@ -23,6 +24,7 @@ function MyNavbar() {
     setOwner,
     title,
     setTitle,
+    forks,
   } = useContext(HtmlPdfContext);
   const {
     user,
@@ -56,7 +58,6 @@ function MyNavbar() {
 
   const forkProject = async () => {
     setSaving(true);
-
     const token = await getCurrentUserIdToken();
     const res = await server.get(`/fork/${projectId}`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -70,7 +71,7 @@ function MyNavbar() {
     if (isSignedIn !== true) {
       return (
         <Button variant="secondary" disabled>
-          Sign in to Save
+          Sign in to Save/Fork
         </Button>
       );
     }
@@ -190,9 +191,17 @@ function MyNavbar() {
         </Form>
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav className="me-auto">
+            <Nav.Link
+              onClick={() => history.push(`/p/${projectId}/forks`)}
+              className="mr-3"
+            >
+              Forks{" "}
+              <Badge pill bg="warning">
+                {forks.length}
+              </Badge>
+            </Nav.Link>
             {renderSave()}
             <div className="ml-3">{renderSignIn()}</div>
-            {/* <Navbar.Text>Made with ❤ by Kinjal Raykarmakar</Navbar.Text> */}
           </Nav>
         </Navbar.Collapse>
       </Container>

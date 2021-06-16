@@ -93,13 +93,32 @@ app.get("/fork/:projectId", decodeIDToken, async (req, res) => {
   return res.json({ projectId: _id, owner: req.user });
 });
 
+app.post("/pull/:originalProjectId", decodeIDToken, async (req, res) => {
+  /**
+   * the projectID in the req.params is the original project ID, i.e. "where to pull"
+   * the projectID in the req.body is the forked project ID, i.e. "from where to pull"
+   */
+  const { originalProjectId } = req.params;
+  const { forkedProjectId } = req.body;
+
+  const { template, data, options } = await Project.findById(forkedProjectId);
+  await Project.findByIdAndUpdate(originalProjectId, {
+    template,
+    data,
+    options,
+  });
+
+  return res.json({ template, data, options });
+});
+
 app.get("/project/:id", async (req, res) => {
   const { id } = req.params;
 
   console.log("Getting project ID", id);
   const project = await Project.findById(id).populate("owner");
+  const forks = await Project.find({ forked: id });
 
-  res.json(project);
+  res.json({ ...project._doc, forks });
 });
 
 app.post("/project/:id", decodeIDToken, async (req, res) => {
