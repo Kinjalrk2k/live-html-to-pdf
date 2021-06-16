@@ -65,9 +65,9 @@ function LandingPage() {
             <Button href={`/p/${project._id}`} variant="primary">
               Open
             </Button>
-            <Button variant="danger" className="ml-2">
+            {/* <Button variant="danger" className="ml-2">
               Delete
-            </Button>
+            </Button> */}
           </Card.Body>
         </Card>
       );
