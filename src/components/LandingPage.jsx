@@ -61,7 +61,13 @@ function LandingPage() {
               {project._id}
             </Card.Subtitle>
 
-            <Card.Link href={`/p/${project._id}`}>Open project</Card.Link>
+            {/* <Card.Link href={`/p/${project._id}`}>Open project</Card.Link> */}
+            <Button href={`/p/${project._id}`} variant="primary">
+              Open
+            </Button>
+            <Button variant="danger" className="ml-2">
+              Delete
+            </Button>
           </Card.Body>
         </Card>
       );
@@ -161,6 +167,7 @@ function LandingPage() {
           justifyContent: "space-evenly",
           alignItems: "stretch",
           flexWrap: "wrap",
+          paddingBottom: "1rem",
         }}
       >
         {renderProjects()}
