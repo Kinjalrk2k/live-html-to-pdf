@@ -68,20 +68,21 @@ app.get("/new", decodeIDToken, async (req, res) => {
   return res.json({ projectId: _id, owner: req.user });
 });
 
-app.post("/fork", decodeIDToken, async (req, res) => {
+app.get("/fork/:projectId", decodeIDToken, async (req, res) => {
   if (!req.user) {
     return res.status(401).json({ err: "You need to login to create a fork" });
   }
 
-  const { template, data, options } = await Project.findById(
-    req.body.projectId
+  const { template, data, options, title } = await Project.findById(
+    req.params.projectId
   );
   const newProject = new Project({
+    title: `Fork of ${title}`,
     template,
     data,
     options,
     owner: req.user._id,
-    forked: req.body.projectId,
+    forked: req.params.projectId,
   });
   const { _id } = await newProject.save();
 

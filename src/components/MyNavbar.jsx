@@ -9,6 +9,7 @@ import {
   FormControl,
   Form,
 } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import server from "../api/server";
 import { AuthContext } from "../contexts/Auth.context";
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
@@ -33,6 +34,7 @@ function MyNavbar() {
   } = useContext(AuthContext);
   const [saving, setSaving] = useState(false);
   const [titleChanging, setTitleChanging] = useState(false);
+  const history = useHistory();
 
   const saveProject = async () => {
     setSaving(true);
@@ -48,6 +50,18 @@ function MyNavbar() {
     );
 
     setOwner(res.data.owner);
+    setSaving(false);
+  };
+
+  const forkProject = async () => {
+    setSaving(true);
+    const token = await getCurrentUserIdToken();
+    const res = await server.get(`/fork/${projectId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const { projectId, owner } = res.data;
+    setOwner(owner);
+    history.push(`/p/${projectId}`);
     setSaving(false);
   };
 
@@ -83,8 +97,8 @@ function MyNavbar() {
       return <Button onClick={saveProject}>Save Project</Button>;
     } else {
       return (
-        <Button variant="secondary" disabled>
-          You dont own this project!
+        <Button variant="secondary" onClick={forkProject}>
+          Fork
         </Button>
       );
     }
