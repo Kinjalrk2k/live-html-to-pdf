@@ -30,6 +30,7 @@ const ProjectSchema = new mongoose.Schema({
   options: { type: String, default: defaultOptions },
   data: { type: String, default: defaultData },
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  forked: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
 });
 
 module.exports = Project = mongoose.model("Project", ProjectSchema);

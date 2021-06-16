@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useContext, useState } from "react";
 import {
   Container,
@@ -8,7 +7,9 @@ import {
   Spinner,
   FormControl,
   Form,
+  Badge,
 } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
 import server from "../api/server";
 import { AuthContext } from "../contexts/Auth.context";
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
@@ -23,6 +24,7 @@ function MyNavbar() {
     setOwner,
     title,
     setTitle,
+    forks,
   } = useContext(HtmlPdfContext);
   const {
     user,
@@ -33,9 +35,12 @@ function MyNavbar() {
   } = useContext(AuthContext);
   const [saving, setSaving] = useState(false);
   const [titleChanging, setTitleChanging] = useState(false);
+  const history = useHistory();
 
   const saveProject = async () => {
     setSaving(true);
+    console.log(projectId);
+
     const token = await getCurrentUserIdToken();
     const res = await server.post(
       `/project/${projectId}`,
@@ -51,11 +56,22 @@ function MyNavbar() {
     setSaving(false);
   };
 
+  const forkProject = async () => {
+    setSaving(true);
+    const token = await getCurrentUserIdToken();
+    const res = await server.get(`/fork/${projectId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setOwner(res.data.owner);
+    history.push(`/p/${res.data.projectId}`);
+    setSaving(false);
+  };
+
   const renderSave = () => {
     if (isSignedIn !== true) {
       return (
         <Button variant="secondary" disabled>
-          Sign in to Save
+          Sign in to Save/Fork
         </Button>
       );
     }
@@ -83,8 +99,8 @@ function MyNavbar() {
       return <Button onClick={saveProject}>Save Project</Button>;
     } else {
       return (
-        <Button variant="secondary" disabled>
-          You dont own this project!
+        <Button variant="secondary" onClick={forkProject}>
+          Fork
         </Button>
       );
     }
@@ -175,9 +191,17 @@ function MyNavbar() {
         </Form>
         <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
           <Nav className="me-auto">
+            <Nav.Link
+              onClick={() => history.push(`/p/${projectId}/forks`)}
+              className="mr-3"
+            >
+              Forks{" "}
+              <Badge pill bg="warning">
+                {forks.length}
+              </Badge>
+            </Nav.Link>
             {renderSave()}
             <div className="ml-3">{renderSignIn()}</div>
-            {/* <Navbar.Text>Made with ❤ by Kinjal Raykarmakar</Navbar.Text> */}
           </Nav>
         </Navbar.Collapse>
       </Container>
