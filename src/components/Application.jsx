@@ -10,11 +10,12 @@ import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 import { AuthContext } from "../contexts/Auth.context";
 
 function Application(props) {
-  const { setProjectId, owner } = useContext(HtmlPdfContext);
+  const { setProjectId, owner, title } = useContext(HtmlPdfContext);
   const { isSignedIn } = useContext(AuthContext);
 
   useEffect(() => {
     setProjectId(props.match.params.id);
+    document.title = `${title} | Live HTML to PDF`;
   });
 
   if (owner === null || isSignedIn === null) {

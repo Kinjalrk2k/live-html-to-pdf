@@ -43,6 +43,7 @@ function Forks(props) {
 
   useEffect(() => {
     setProjectId(props.match.params.id);
+    document.title = `Forks of ${title} | Live HTML to PDF`;
   });
 
   const pullProject = async (forkedProjectId) => {
