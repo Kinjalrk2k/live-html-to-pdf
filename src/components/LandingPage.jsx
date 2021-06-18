@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 
 import { Button, Container, Row, Card, Spinner } from "react-bootstrap";
+import DeleteModal from "./DeleteModal";
 
 function LandingPage() {
   const history = useHistory();
@@ -21,6 +22,15 @@ function LandingPage() {
 
   const [projects, setProjects] = useState([]);
   const [creating, setCreating] = useState(false);
+
+  const [modalShow, setModalShow] = useState(false);
+  const [modalData, setModalData] = useState({});
+  const handleModalOpen = () => setModalShow(true);
+  const handleModalClose = () => setModalShow(false);
+  const modalSetAndOpen = (data) => {
+    setModalData(data);
+    handleModalOpen();
+  };
 
   const createNewProject = async () => {
     setCreating(true);
@@ -65,9 +75,13 @@ function LandingPage() {
             <Button href={`/p/${project._id}`} variant="primary">
               Open
             </Button>
-            {/* <Button variant="danger" className="ml-2">
+            <Button
+              variant="danger"
+              className="ml-2"
+              onClick={() => modalSetAndOpen(project)}
+            >
               Delete
-            </Button> */}
+            </Button>
           </Card.Body>
         </Card>
       );
@@ -172,6 +186,11 @@ function LandingPage() {
       >
         {renderProjects()}
       </Container>
+      <DeleteModal
+        show={modalShow}
+        data={modalData}
+        handleClose={handleModalClose}
+      />
     </div>
   );
 }

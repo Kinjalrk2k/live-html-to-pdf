@@ -9,6 +9,7 @@ import {
   Row,
   Card,
   ListGroup,
+  Badge,
 } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import server from "../api/server";
@@ -69,9 +70,11 @@ function Forks(props) {
         <ListGroup.Item>
           <Row>
             <Col>
-              <Card.Title>{fork.title}</Card.Title>
+              <Card.Title>
+                {fork.title} <Badge variant="info">{fork._id}</Badge>
+              </Card.Title>
               <Card.Subtitle className="mb-2 text-muted">
-                {fork._id}
+                by {fork.owner.name}
               </Card.Subtitle>
             </Col>
             <Col
@@ -100,7 +103,8 @@ function Forks(props) {
   return (
     <Container className="mt-4">
       <h2 className="mb-4">
-        Forks of {title} ({projectId})
+        Forks of <a href={`/p/${projectId}`}>{title}</a>{" "}
+        <Badge variant="warning">{projectId}</Badge>
       </h2>
       <ListGroup>{renderList()}</ListGroup>
     </Container>
