@@ -151,12 +151,23 @@ app.post("/project/:id", decodeIDToken, async (req, res) => {
   res.json(updatedProject);
 });
 
+app.delete("/project/:id", decodeIDToken, async (req, res) => {
+  const { id } = req.params;
+
+  await Project.findOneAndDelete({
+    _id: id,
+    owner: req.user._id,
+  });
+
+  res.json({ success: true });
+});
+
 app.get("/projects", decodeIDToken, async (req, res) => {
   let projects = [];
   if (req.user) {
     console.log("Owner:", req.user._id);
     projects = await Project.find({ owner: req.user._id });
-    console.log(projects);
+    // console.log(projects);
   }
   return res.json(projects);
 });
