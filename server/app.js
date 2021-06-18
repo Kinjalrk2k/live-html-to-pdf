@@ -116,7 +116,7 @@ app.get("/project/:id", async (req, res) => {
 
   console.log("Getting project ID", id);
   const project = await Project.findById(id).populate("owner");
-  const forks = await Project.find({ forked: id });
+  const forks = await Project.find({ forked: id }).populate("owner");
 
   res.json({ ...project._doc, forks });
 });
