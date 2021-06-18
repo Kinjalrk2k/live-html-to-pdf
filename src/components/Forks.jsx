@@ -103,7 +103,8 @@ function Forks(props) {
   return (
     <Container className="mt-4">
       <h2 className="mb-4">
-        Forks of {title} ({projectId})
+        Forks of <a href={`/p/${projectId}`}>{title}</a>{" "}
+        <Badge variant="warning">{projectId}</Badge>
       </h2>
       <ListGroup>{renderList()}</ListGroup>
     </Container>
