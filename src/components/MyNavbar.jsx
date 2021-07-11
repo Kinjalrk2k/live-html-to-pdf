@@ -142,7 +142,7 @@ function MyNavbar() {
     setTitle(e.target[0].value);
 
     const token = await getCurrentUserIdToken();
-    const res = await server.patch(
+    await server.patch(
       `/project/${projectId}/title`,
       { title },
       { headers: { Authorization: `Bearer ${token}` } }

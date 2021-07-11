@@ -1,10 +1,7 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import {
   Container,
-  Navbar,
-  Nav,
   Button,
-  Spinner,
   Col,
   Row,
   Card,
@@ -20,26 +17,13 @@ function Forks(props) {
   const {
     projectId,
     setProjectId,
-    template,
     setTemplate,
-    data,
     setData,
-    options,
     setOptions,
-    owner,
-    setOwner,
     title,
-    setTitle,
     forks,
-    setForks,
   } = useContext(HtmlPdfContext);
-  const {
-    user,
-    signInContext,
-    signOutContext,
-    isSignedIn,
-    getCurrentUserIdToken,
-  } = useContext(AuthContext);
+  const { getCurrentUserIdToken } = useContext(AuthContext);
   const history = useHistory();
 
   useEffect(() => {

@@ -12,16 +12,18 @@ export function HtmlPdfProvider(props) {
   const [title, setTitle] = useState("");
   const [forks, setForks] = useState("");
 
-  useEffect(async () => {
-    const res = await server.get(`/project/${projectId}`);
-    const { template, data, options, owner, title, forks } = res.data;
+  useEffect(() => {
+    (async () => {
+      const res = await server.get(`/project/${projectId}`);
+      const { template, data, options, owner, title, forks } = res.data;
 
-    setTemplate(template);
-    setData(data);
-    setOptions(options);
-    setOwner(owner);
-    setTitle(title);
-    setForks(forks);
+      setTemplate(template);
+      setData(data);
+      setOptions(options);
+      setOwner(owner);
+      setTitle(title);
+      setForks(forks);
+    })();
   }, [projectId]);
 
   return (

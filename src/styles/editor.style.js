@@ -1,4 +1,4 @@
-export default {
+const editorStyles = {
   theme: "github",
   setOptions: {
     enableBasicAutocompletion: true,
@@ -11,3 +11,5 @@ export default {
   height: "83vh",
   fontSize: "13px",
 };
+
+export default editorStyles;

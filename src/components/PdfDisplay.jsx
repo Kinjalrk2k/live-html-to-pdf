@@ -68,7 +68,11 @@ function PdfDisplay() {
       );
     }
 
-    return <object style={styles} data={file} type="application/pdf"></object>;
+    return (
+      <object style={styles} data={file} type="application/pdf">
+        Output PDF
+      </object>
+    );
   };
 
   return <div>{render()}</div>;

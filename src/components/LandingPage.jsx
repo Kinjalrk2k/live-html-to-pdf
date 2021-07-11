@@ -11,13 +11,8 @@ import DeleteModal from "./DeleteModal";
 
 function LandingPage() {
   const history = useHistory();
-  const {
-    user,
-    signInContext,
-    signOutContext,
-    isSignedIn,
-    getCurrentUserIdToken,
-  } = useContext(AuthContext);
+  const { signInContext, signOutContext, isSignedIn, getCurrentUserIdToken } =
+    useContext(AuthContext);
   const { setOwner } = useContext(HtmlPdfContext);
 
   const [projects, setProjects] = useState([]);
@@ -33,6 +28,20 @@ function LandingPage() {
     handleModalOpen();
   };
 
+  useEffect(() => {
+    (async () => {
+      setFetchingProjects(true);
+      const token = await getCurrentUserIdToken();
+
+      const res = await server.get("/projects", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setProjects(res.data);
+      setFetchingProjects(false);
+    })();
+  }, [isSignedIn, getCurrentUserIdToken]);
+
   const createNewProject = async () => {
     setCreating(true);
     const token = await getCurrentUserIdToken();
@@ -46,20 +55,6 @@ function LandingPage() {
     history.push(`/p/${projectId}`);
     setCreating(false);
   };
-
-  useEffect(() => {
-    (async () => {
-      setFetchingProjects(true);
-      const token = await getCurrentUserIdToken();
-
-      const res = await server.get("/projects", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      setProjects(res.data);
-      setFetchingProjects(false);
-    })();
-  }, [isSignedIn]);
 
   const renderProjects = () => {
     if (!isSignedIn) {
