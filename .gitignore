@@ -25,4 +25,5 @@ yarn-error.log*
 output.pdf
 server/output.pdf
 server/serviceAccount.json
-src/config/firebase.js
+# src/config/firebase.js
+.env
