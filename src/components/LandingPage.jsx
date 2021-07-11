@@ -6,7 +6,7 @@ import { useContext, useState } from "react";
 import { useEffect } from "react";
 import { HtmlPdfContext } from "../contexts/HtmlPdf.context";
 
-import { Button, Container, Row, Card, Spinner } from "react-bootstrap";
+import { Button, Container, Row, Card, Spinner, Alert } from "react-bootstrap";
 import DeleteModal from "./DeleteModal";
 
 function LandingPage() {
@@ -21,6 +21,7 @@ function LandingPage() {
   const { setOwner } = useContext(HtmlPdfContext);
 
   const [projects, setProjects] = useState([]);
+  const [fetchingProjects, setFetchingProjects] = useState(false);
   const [creating, setCreating] = useState(false);
 
   const [modalShow, setModalShow] = useState(false);
@@ -48,6 +49,7 @@ function LandingPage() {
 
   useEffect(() => {
     (async () => {
+      setFetchingProjects(true);
       const token = await getCurrentUserIdToken();
 
       const res = await server.get("/projects", {
@@ -55,13 +57,39 @@ function LandingPage() {
       });
 
       setProjects(res.data);
+      setFetchingProjects(false);
     })();
   }, [isSignedIn]);
 
   const renderProjects = () => {
-    if (projects.length === 0) {
-      return <div>No projects found!</div>;
+    if (!isSignedIn) {
+      return (
+        <div style={{ marginTop: "2rem" }}>
+          <Alert variant="warning">Sign In to see your projects!</Alert>
+        </div>
+      );
     }
+
+    if (fetchingProjects) {
+      return (
+        <div style={{ marginTop: "2rem" }}>
+          Loading projects{" "}
+          <Spinner
+            as="span"
+            animation="grow"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />{" "}
+          Please stand by!
+        </div>
+      );
+    }
+
+    if (projects.length === 0) {
+      return <div style={{ marginTop: "2rem" }}>No projects found!</div>;
+    }
+
     return projects.map((project, idx) => {
       return (
         <Card key={project._id} style={{ width: "18rem", marginTop: "2rem" }}>
